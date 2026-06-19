@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Store - Inventory & Money Management System</title>
+  <!-- Google Fonts: Inter & JetBrains Mono for Code logs -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- App Shell Container -->
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="a1_logo.png" alt="A1 Store Logo" class="brand-logo">
+        <div class="brand-info">
+          <h1>A1 Store</h1>
+          <span class="status-badge"><span class="pulse-dot"></span>Active Session</span>
+        </div>
+      </div>
+      
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="home" id="nav-home">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </button>
+        <button class="nav-item" data-tab="galla" id="nav-galla">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Galla Box
+        </button>
+        <button class="nav-item" data-tab="inventory" id="nav-inventory">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Inventory
+          <span class="badge badge-warning hidden" id="low-stock-count-badge">0</span>
+        </button>
+        <button class="nav-item" data-tab="credits" id="nav-credits">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Credits
+          <span class="badge badge-danger hidden" id="credit-debtors-badge">0</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="time-widget">
+          <span class="time-label">Local Time</span>
+          <span class="time-value" id="current-time">15:50</span>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- HEADER BAR -->
+      <header class="content-header">
+        <div class="header-title">
+          <h2 id="section-title">Dashboard Overview</h2>
+          <p id="section-subtitle">Real-time store metrics & fast entry controls</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary btn-glow" id="btn-quick-sale">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Quick Cash Sale
+          </button>
+        </div>
+      </header>
+      
+      <!-- SECTIONS -->
+
+      <!-- 1. HOME SECTION -->
+      <section id="sec-home" class="content-section active">
+        <!-- Dashboard Cards Grid -->
+        <div class="stats-grid">
+          <div class="stat-card card-galla">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Galla Balance</span>
+              <h3 class="stat-value" id="stat-galla-balance">Rs. 0.00</h3>
+              <span class="stat-trend trend-up">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+                Live Register
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card card-credits">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Outstanding Credits</span>
+              <h3 class="stat-value" id="stat-active-credits">Rs. 0.00</h3>
+              <span class="stat-trend trend-warning" id="stat-debtor-count">
+                0 Pending Debtors
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card card-inventory">
+            <div class="stat-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Inventory Status</span>
+              <h3 class="stat-value" id="stat-total-products">0 Products</h3>
+              <span class="stat-trend" id="stat-low-stock-alert">
+                All Stocks Normal
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ledger Entries Quick Action Area -->
+        <div class="action-panel-container">
+          <div class="panel-header">
+            <h3>Ledger Entry Shortcuts</h3>
+            <p>Select how the transaction payment is handled</p>
+          </div>
+          
+          <div class="action-cards-grid">
+            <div class="action-card pay-card" id="btn-pay-modal">
+              <div class="action-badge">Instant</div>
+              <div class="action-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div class="action-info">
+                <h4>On Pay Transaction</h4>
+                <p>Record standard customer sales paid immediately with Cash or QR code.</p>
+              </div>
+              <button class="btn btn-success action-btn">Record Payment</button>
+            </div>
+
+            <div class="action-card credit-card" id="btn-credit-modal">
+              <div class="action-badge warning">Pending</div>
+              <div class="action-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </div>
+              <div class="action-info">
+                <h4>On Credit Transaction</h4>
+                <p>Log sales made on credit, mapping item details directly to customer balances.</p>
+              </div>
+              <button class="btn btn-warning action-btn">Record Credit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Table -->
+        <div class="table-container home-activity">
+          <div class="table-header">
+            <h3>Recent Sales & Restocks</h3>
+            <button class="btn btn-secondary" onclick="document.getElementById('nav-galla').click()">View All Ledger</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Products Sold / Added</th>
+                <th>Payment Type</th>
+                <th>Entity/Customer</th>
+                <th>Galla Impact</th>
+              </tr>
+            </thead>
+            <tbody id="home-recent-transactions">
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 2. GALLA SECTION -->
+      <section id="sec-galla" class="content-section">
+        <!-- Live Register Summary -->
+        <div class="galla-stats-bar">
+          <div class="galla-balance-glow-box">
+            <span class="label">Total Galla Box Balance</span>
+            <span class="amount" id="galla-balance-display">Rs. 0.00</span>
+          </div>
+          <div class="galla-breakdown">
+            <div class="breakdown-item income">
+              <span class="lbl">Total Income (+)</span>
+              <span class="val" id="galla-total-income">Rs. 0.00</span>
+            </div>
+            <div class="breakdown-separator"></div>
+            <div class="breakdown-item expense">
+              <span class="lbl">Total Expenses (-)</span>
+              <span class="val" id="galla-total-expense">Rs. 0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtering & Search Control -->
+        <div class="filter-bar">
+          <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="galla-search" placeholder="Search by product, customer, description...">
+          </div>
+          
+          <div class="filter-groups">
+            <select id="galla-filter-type" class="filter-select">
+              <option value="all">All Flow Types</option>
+              <option value="incoming">Incoming (Sales / Payback)</option>
+              <option value="outgoing">Outgoing (Restocks / Expenses)</option>
+            </select>
+            
+            <select id="galla-filter-method" class="filter-select">
+              <option value="all">All Payments</option>
+              <option value="cash">Cash Sales</option>
+              <option value="credit">Credit Ledgers</option>
+            </select>
+            
+            <button class="btn btn-secondary btn-icon" id="galla-btn-reset-filters" title="Reset Filters">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Transaction Table -->
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date / Time</th>
+                <th>Reference ID</th>
+                <th>Type</th>
+                <th>Products & Details</th>
+                <th>Payment Status</th>
+                <th>Impact</th>
+              </tr>
+            </thead>
+            <tbody id="galla-transaction-table-body">
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+          <div class="table-empty hidden" id="galla-empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>No matching transactions found.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. INVENTORY SECTION -->
+      <section id="sec-inventory" class="content-section">
+        <!-- Toolbar for Inventory -->
+        <div class="inventory-toolbar">
+          <div class="inventory-search search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="inventory-search-input" placeholder="Search product name or stock status...">
+          </div>
+          <div class="toolbar-actions">
+            <button class="btn btn-primary" id="btn-add-product-modal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add New Product
+            </button>
+          </div>
+        </div>
+
+        <!-- Products Grid / Table -->
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Selling Price</th>
+                <th>Stock Quantity</th>
+                <th>Status Badge</th>
+                <th>Action Controls</th>
+              </tr>
+            </thead>
+            <tbody id="inventory-table-body">
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+          <div class="table-empty hidden" id="inventory-empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <p>No products in the inventory. Add your first product to get started!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CREDITS SECTION -->
+      <section id="sec-credits" class="content-section">
+        <!-- Header Info -->
+        <div class="credits-dashboard">
+          <div class="credits-stats">
+            <div class="cred-stat-item">
+              <span class="label">Total Outstanding Balance</span>
+              <span class="value text-warning" id="credit-total-outstanding">Rs. 0.00</span>
+            </div>
+            <div class="cred-stat-item border-left">
+              <span class="label">Active Credit Customers</span>
+              <span class="value" id="credit-active-customers-count">0</span>
+            </div>
+          </div>
+          
+          <!-- Global reminder action -->
+          <div class="credits-global-action">
+            <button class="btn btn-warning btn-glow" id="btn-whatsapp-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Broadcast WhatsApp Reminders
+            </button>
+          </div>
+        </div>
+
+        <!-- Template Editor -->
+        <div class="template-editor-panel">
+          <div class="panel-header">
+            <h4>WhatsApp Reminder Message Template</h4>
+            <p>Customize the message text. Available dynamic variables: <code>{customer_name}</code>, <code>{amount}</code>, and <code>{store_name}</code>.</p>
+          </div>
+          <div class="template-input-wrapper">
+            <textarea id="credits-msg-template" class="form-control" rows="2" placeholder="Dear {customer_name}, please clear your pending dues of Rs. {amount} at {store_name}. Thank you!"></textarea>
+            <button class="btn btn-secondary" id="btn-save-template">Save Template</button>
+          </div>
+        </div>
+
+        <!-- Debtors Table -->
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Contact Phone</th>
+                <th>Active Debts Detail</th>
+                <th>Total Pending</th>
+                <th>Last Credit Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="credits-table-body">
+              <!-- JS Populated -->
+            </tbody>
+          </table>
+          <div class="table-empty hidden" id="credits-empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <p>Perfect! No pending credits found in the ledger.</p>
+          </div>
+        </div>
+
+        <!-- Developer Simulated API log terminal -->
+        <div class="api-console-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <span class="terminal-title">Twilio API Console Terminal (Simulated Sandbox)</span>
+            <button class="btn-clear-logs" id="btn-clear-terminal">Clear Console</button>
+          </div>
+          <div class="terminal-body" id="terminal-api-logs">
+            <div class="log-line text-muted">[2026-06-19 15:50:00] Initializing Twilio Integration API handler...</div>
+            <div class="log-line text-info">[2026-06-19 15:50:00] Server CORS policy loaded. Developer sandbox listening...</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ==================== MODALS LAYOUT ==================== -->
+
+  <!-- MODAL BACKDROP CONTAINER -->
+  <div class="modal-backdrop hidden" id="modal-backdrop"></div>
+
+  <!-- 1. DIRECT SALE MODAL ("ON PAY") -->
+  <div class="modal hidden" id="modal-pay-sale">
+    <div class="modal-header">
+      <h3>Record Instant Payment Sale</h3>
+      <button class="modal-close" data-close-modal="modal-pay-sale">&times;</button>
+    </div>
+    <form id="form-pay-sale">
+      <div class="modal-body">
+        
+        <!-- Cart Item Selector row -->
+        <div class="cart-builder-container">
+          <label class="form-label">Add Products to Sale Cart</label>
+          <div class="cart-selector-row">
+            <select id="pay-product-select" class="form-control select-product-dropdown">
+              <!-- Dynamically Populated -->
+            </select>
+            <div class="qty-spinner">
+              <input type="number" id="pay-qty-input" value="1" min="1" class="form-control" placeholder="Qty">
+            </div>
+            <button type="button" class="btn btn-secondary" id="btn-pay-add-to-cart">Add</button>
+          </div>
+        </div>
+
+        <!-- The Cart Table -->
+        <div class="cart-table-wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="pay-cart-body">
+              <tr>
+                <td colspan="5" class="cart-empty-message">No items in cart yet. Add items above.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-divider"></div>
+
+        <!-- Transaction Details -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="pay-date">Transaction Date</label>
+            <input type="date" id="pay-date" class="form-control" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="pay-payment-method">Payment Method</label>
+            <select id="pay-payment-method" class="form-control">
+              <option value="cash">Cash (Galla Direct)</option>
+              <option value="qr">Mobile QR Pay (Galla Direct)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary-box">
+          <div class="summary-line">
+            <span>Subtotal:</span>
+            <strong id="pay-cart-subtotal">Rs. 0.00</strong>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-pay-sale">Cancel</button>
+        <button type="submit" class="btn btn-success btn-glow">Record & Cash-In</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 2. CREDIT SALE MODAL ("ON CREDIT") -->
+  <div class="modal hidden" id="modal-credit-sale">
+    <div class="modal-header">
+      <h3>Record Credit Purchase Ledger</h3>
+      <button class="modal-close" data-close-modal="modal-credit-sale">&times;</button>
+    </div>
+    <form id="form-credit-sale">
+      <div class="modal-body">
+        
+        <!-- Customer Details -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="credit-customer-name">Customer Full Name</label>
+            <input type="text" id="credit-customer-name" class="form-control" placeholder="e.g. Bijay Kumar" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="credit-customer-phone">WhatsApp Contact Phone</label>
+            <input type="tel" id="credit-customer-phone" class="form-control" placeholder="e.g. +97798XXXXXXXX" required>
+          </div>
+        </div>
+
+        <div class="modal-divider"></div>
+
+        <!-- Cart Item Selector row -->
+        <div class="cart-builder-container">
+          <label class="form-label">Add Products to Credit Cart</label>
+          <div class="cart-selector-row">
+            <select id="credit-product-select" class="form-control select-product-dropdown">
+              <!-- Dynamically Populated -->
+            </select>
+            <div class="qty-spinner">
+              <input type="number" id="credit-qty-input" value="1" min="1" class="form-control" placeholder="Qty">
+            </div>
+            <button type="button" class="btn btn-secondary" id="btn-credit-add-to-cart">Add</button>
+          </div>
+        </div>
+
+        <!-- The Cart Table -->
+        <div class="cart-table-wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="credit-cart-body">
+              <tr>
+                <td colspan="5" class="cart-empty-message">No items in cart yet. Add items above.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="modal-divider"></div>
+
+        <!-- Transaction Details -->
+        <div class="form-group">
+          <label class="form-label" for="credit-date">Transaction Date</label>
+          <input type="date" id="credit-date" class="form-control" required>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary-box warning-box">
+          <div class="summary-line">
+            <span>Outstanding Debt Total:</span>
+            <strong id="credit-cart-total" class="text-warning">Rs. 0.00</strong>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-credit-sale">Cancel</button>
+        <button type="submit" class="btn btn-warning btn-glow">Record Credit Ledger</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 3. ADD NEW PRODUCT MODAL -->
+  <div class="modal hidden" id="modal-add-product">
+    <div class="modal-header">
+      <h3>Add New Product to Inventory</h3>
+      <button class="modal-close" data-close-modal="modal-add-product">&times;</button>
+    </div>
+    <form id="form-add-product">
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label class="form-label" for="prod-name">Product Name</label>
+          <input type="text" id="prod-name" class="form-control" placeholder="e.g. Coca-Cola 500ml" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="prod-price">Retail Selling Price (Rs.)</label>
+            <input type="number" id="prod-price" min="0" step="0.01" class="form-control" placeholder="e.g. 80.00" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="prod-qty">Initial Stock Quantity</label>
+            <input type="number" id="prod-qty" min="0" class="form-control" placeholder="e.g. 50" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="prod-threshold">Low Stock Warning Threshold</label>
+          <input type="number" id="prod-threshold" min="1" value="5" class="form-control" required>
+          <span class="input-hint">You will receive an alert if the stock falls at or below this value.</span>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-add-product">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 4. RESTOCK PRODUCT MODAL -->
+  <div class="modal hidden" id="modal-restock-product">
+    <div class="modal-header">
+      <h3>Restock Product</h3>
+      <button class="modal-close" data-close-modal="modal-restock-product">&times;</button>
+    </div>
+    <form id="form-restock-product">
+      <input type="hidden" id="restock-prod-id">
+      <div class="modal-body">
+        <div class="product-info-badge">
+          <span class="label">Product Selected:</span>
+          <strong id="restock-prod-display-name">Product Name</strong>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label" for="restock-qty">Restock Quantity</label>
+            <input type="number" id="restock-qty" min="1" class="form-control" placeholder="e.g. 24" required>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label" for="restock-unit-cost">Unit Cost of Purchase (Rs.)</label>
+            <input type="number" id="restock-unit-cost" min="0" step="0.01" class="form-control" placeholder="Wholesale cost" required>
+            <span class="input-hint">Will be deducted from Galla.</span>
+          </div>
+        </div>
+
+        <div class="modal-divider"></div>
+
+        <div class="cart-summary-box danger-box">
+          <div class="summary-line">
+            <span>Total Galla Outflow:</span>
+            <strong id="restock-total-cost" class="text-danger">Rs. 0.00</strong>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-restock-product">Cancel</button>
+        <button type="submit" class="btn btn-danger">Confirm & Deduct Cash</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 5. EDIT PRODUCT PRICE MODAL -->
+  <div class="modal hidden" id="modal-edit-price">
+    <div class="modal-header">
+      <h3>Change Selling Price</h3>
+      <button class="modal-close" data-close-modal="modal-edit-price">&times;</button>
+    </div>
+    <form id="form-edit-price">
+      <input type="hidden" id="edit-price-prod-id">
+      <div class="modal-body">
+        <div class="product-info-badge">
+          <span class="label">Product Selected:</span>
+          <strong id="edit-price-display-name">Product Name</strong>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-price-value">New Selling Price (Rs.)</label>
+          <input type="number" id="edit-price-value" min="0" step="0.01" class="form-control" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-edit-price">Cancel</button>
+        <button type="submit" class="btn btn-primary">Update Price</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 6. SETTLE CREDIT MODAL -->
+  <div class="modal hidden" id="modal-settle-credit">
+    <div class="modal-header">
+      <h3>Settle Pending Credit Account</h3>
+      <button class="modal-close" data-close-modal="modal-settle-credit">&times;</button>
+    </div>
+    <form id="form-settle-credit">
+      <input type="hidden" id="settle-customer-name-hidden">
+      <div class="modal-body">
+        <div class="customer-debts-overview">
+          <div class="info-line">
+            <span>Customer Name:</span>
+            <strong id="settle-customer-display-name">Bijay Kumar</strong>
+          </div>
+          <div class="info-line">
+            <span>Current Pending Balance:</span>
+            <strong id="settle-customer-display-balance" class="text-warning">Rs. 0.00</strong>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="settle-amount">Repayment Cash Amount Received (Rs.)</label>
+          <input type="number" id="settle-amount" min="0.01" step="0.01" class="form-control" placeholder="e.g. 500.00" required>
+          <span class="input-hint">This will reduce the pending credit balance and add Cash to the Galla box.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="settle-date">Repayment Date</label>
+          <input type="date" id="settle-date" class="form-control" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal="modal-settle-credit">Cancel</button>
+        <button type="submit" class="btn btn-success btn-glow">Record Repayment</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
